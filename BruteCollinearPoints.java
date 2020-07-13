@@ -10,8 +10,10 @@ public class BruteCollinearPoints {
         lSegments = new ArrayList<>();
         findCollinear(points.clone());
     }
-
+    // Find exactly 4 collinear points
     private void findCollinear(Point[] points) {
+        
+        // For validation of no null Point or duplicate values if size is lezz than 4 
         if (points.length <= 3) {
             for (int i = 0; i < points.length; i++) {
                 assertPoint(points[i]);
@@ -22,8 +24,8 @@ public class BruteCollinearPoints {
             }
         }
         else {
-
-            // Arrays.sort(points);
+            
+            // For finding collinear points if size is more than or equals to 4 
             for (int i = 0; i < points.length - 3; i++) {
                 assertPoint(points[i]);
                 Point mxP = points[i];
@@ -47,39 +49,31 @@ public class BruteCollinearPoints {
                                 assertTwoPoints(points[k], points[l]);
                                 // StdOut.println("6. " + i + ", j=" + j + ", k=" + k + ", l=" + l);
                                 if (points[i].slopeTo(points[j]) == points[i].slopeTo(points[l])) {
-
+                                    // Find the lowest point
                                     mnP = points[i].compareTo(points[j]) > 0 ? points[j] :
                                           points[i];
-                                    // StdOut.println("1. " + mnP);
                                     mnP = mnP.compareTo(points[k]) > 0 ? points[k] : mnP;
-                                    // StdOut.println("2. " + mnP);
                                     mnP = mnP.compareTo(points[l]) > 0 ? points[l] : mnP;
-                                    // StdOut.println("3. " + mnP);
 
+                                    // Find the heighest point
                                     mxP = points[i].compareTo(points[j]) < 0 ? points[j] :
                                           points[i];
-                                    // StdOut.println("4. " + mxP);
                                     mxP = mxP.compareTo(points[k]) < 0 ? points[k] : mxP;
-                                    // StdOut.println("5. " + mxP);
                                     mxP = mxP.compareTo(points[l]) < 0 ? points[l] : mxP;
-                                    // StdOut.println("6. " + mxP);
-                                    // StdOut.println("poitnst[i]=" + points[i] +
-                                    //                        ", poitnst[j]=" + points[j] +
-                                    //                        ", poitnst[k]=" + points[k] +
-                                    //                        ", poitnst[l]=" + points[l]
-                                    // );
+
                                     lSegments.add(new LineSegment(mnP, mxP));
 
-                                    // break;
                                 }
 
                             } // End of fourth loop
-                        }   // if to check
-
-                        else {
+                        }  
+                        
+                        else {  // if no exactly 4 collinear points, only check null points and duplicate points
+                            
                             for (int l = k + 1; l < points.length; l++) {
                                 assertPoint(points[l]);
-                                // Check two points equality
+                                
+                                // Check duplicate points
                                 assertTwoPoints(points[i], points[l]);
                                 assertTwoPoints(points[j], points[l]);
                                 assertTwoPoints(points[k], points[l]);
@@ -88,7 +82,6 @@ public class BruteCollinearPoints {
                         }
                     } // End of third loop
 
-                    // if (flag) break;
                 } // End of second loop
             }
         }
