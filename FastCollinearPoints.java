@@ -12,7 +12,8 @@ public class FastCollinearPoints {
         lSegments = new ArrayList<>();
         findLinesegments(points.clone());
     }
-
+    
+    // Method to find all collinear points
     private void findLinesegments(Point[] points) {
 
         // Assertion of the argument
@@ -26,64 +27,40 @@ public class FastCollinearPoints {
             Arrays.sort(pointsBySlope, points[i].slopeOrder());
             int count = 1;
             Point mx = points[i];
-            int c = 0;
+            int c = 0;          // To Backtrack the already found subsegments and to avoid re-including them
             for (int j = 0; j < points.length - 1; j++) {
-                if (points[i].slopeTo(pointsBySlope[j]) == points[i]
-                        .slopeTo(pointsBySlope[j + 1])) {
+                if (points[i].slopeTo(pointsBySlope[j]) == points[i].slopeTo(pointsBySlope[j + 1])) {
                     if (points[i].compareTo(pointsBySlope[j]) < 0) {
-
                         count++;
-                        if (mx.compareTo(pointsBySlope[j]) < 0) mx = pointsBySlope[j];
-                        if (mx.compareTo(pointsBySlope[j + 1]) < 0) mx = pointsBySlope[j + 1];
-                        if (count >= 3 && j == pointsBySlope.length - 2 && c < 1) {
-                            // StdOut.println("inside j.. point[i]=" + points[i] +
-                            //                        ", pointsBySlope[j]=" + pointsBySlope[j]
-                            //                        + ", pointsBySlope[j+1]=" + pointsBySlope[j + 1]
-                            //                        +
-                            //                        "slope=" + points[i].slopeTo(pointsBySlope[j])
-                            //                        + ", slope[j]=" + points[i]
-                            //         .slopeTo(pointsBySlope[j + 1])
-                            //                        + " j=" + j + ", len==" + pointsBySlope.length
-                            // );
+                        if (mx.compareTo(pointsBySlope[j]) < 0) mx = pointsBySlope[j];      // taking the highest point of the line segment
+                        if (mx.compareTo(pointsBySlope[j + 1]) < 0) mx = pointsBySlope[j + 1]; // taking the highest point of the line segment
+                        if (count >= 3 && j == pointsBySlope.length - 2 && c < 1) {     // Add the segment only if it's segment or subsegment is not already included
                             lSegments.add(new LineSegment(points[i], mx));
                             mx = points[i];
                             count = 1;
-                            c = 0;
+                            c = 0; // Resetting the backtrack;
                         }
 
                     }
                     else {
-                        c++;
+                        c++;   //Increasing the backtrack in case of the point is already included in any segment and may not be considered in a subsegment;     
                     }
 
                 }
-                else if (count >= 3 && c < 1) {
-                    // StdOut.println("3.) inside j.. point[i]=" + points[i] +
-                    //                        ", pointsBySlope[j]=" + pointsBySlope[j]
-                    //                        + ", pointsBySlope[j+1]=" + pointsBySlope[j + 1]
-                    //                        +
-                    //                        "slope=" + points[i].slopeTo(pointsBySlope[j])
-                    //                        + ", slope[j]=" + points[i]
-                    //         .slopeTo(pointsBySlope[j + 1]));
+                else if (count >= 3 && c < 1) {   // Add the segment only if it's segment or subsegment is not already included
                     lSegments.add(new LineSegment(points[i], mx));
                     mx = points[i];
                     count = 1;
-                    c = 0;
+                    c = 0;  // Resetting the backtrack;
                 }
                 else {
 
 
                     mx = points[i];
                     count = 1;
-                    c = 0;
+                    c = 0; // Resetting the backtrack;
                 }
             }
-
-            // if (count >= 3) {
-            //     // StdOut.println("1");
-            //     // StdOut.println("Points:= " + str);
-            //     lSegments.add(new LineSegment(mnP, mxP));
-            // }
         }
     }
 
@@ -102,9 +79,8 @@ public class FastCollinearPoints {
     private void assertArgument(Point[] arg) {
         if (arg == null) throw new IllegalArgumentException("Constructor argument cannot be null");
     }
-
+    // Asserting if the argument array contains duplicate points
     private void assertDuplicate(Point[] arg) {
-        if (arg == null) throw new IllegalArgumentException("Constructor argument cannot be null");
         for (int i = 0; i < arg.length - 1; i++) {
             if (arg[i].compareTo(arg[i + 1]) == 0) {
                 throw new IllegalArgumentException("Points cannot be duplicate");
