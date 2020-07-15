@@ -10,11 +10,11 @@ public class FastCollinearPoints {
     public FastCollinearPoints(Point[] points) {
         assertArgument(points);
         lSegments = new ArrayList<>();
-        findLinesegments(points.clone());
+        findLineSegments(points.clone());
     }
     
     // Method to find all collinear points
-    private void findLinesegments(Point[] points) {
+    private void findLineSegments(Point[] points) {
 
         // Assertion of the argument
         assertArgument(points);
